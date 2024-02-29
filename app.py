@@ -4,11 +4,12 @@ import os
 from LLM import InternLM_LLM
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
+from modelscope import snapshot_download, AutoModel, AutoTokenizer
 
 def load_chain():
     # 加载问答链
     # 定义 Embeddings
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformer")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 
     # 向量数据库持久化路径
     persist_directory = 'data_base/vector_db/chroma'
@@ -20,7 +21,8 @@ def load_chain():
     )
 
     # 加载自定义 LLM
-    llm = InternLM_LLM(model_path = "Shanghai_AI_Laboratory/internlm-chat-7b")
+    model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b' , revision='v1.0.3')
+    llm = InternLM_LLM(model_path = model_dir)
 
     # 定义一个 Prompt Template
     template = """使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
