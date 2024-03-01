@@ -8,7 +8,7 @@ from langchain.chains import RetrievalQA
 
 from modelscope import snapshot_download, AutoModel, AutoTokenizer
 
-import ('pysqlite3')
+import pysqlite3
 sys.modules['sqlite3']= sys.modules.pop('pysqlite3')
 
 def load_chain():
