@@ -29,7 +29,11 @@ def load_chain():
 
     # 加载自定义 LLM
     model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b' , revision='v1.0.3')
-    llm = InternLM_LLM(model_path = model_dir)
+    tokenizer = AutoTokenizer.from_pretrained(model_dir, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(model_dir, trust_remote_code=True).to(torch.bfloat16).cuda()
+    model = self.model.eval()
+    
+    #llm = InternLM_LLM(model_path = model_dir)
 
     # 定义一个 Prompt Template
     template = """使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
@@ -41,7 +45,7 @@ def load_chain():
     QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context","question"],template=template)
 
     # 运行 chain
-    qa_chain = RetrievalQA.from_chain_type(llm,retriever=vectordb.as_retriever(),return_source_documents=True,chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
+    qa_chain = RetrievalQA.from_chain_type(model,retriever=vectordb.as_retriever(),return_source_documents=True,chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     
     return qa_chain
 
