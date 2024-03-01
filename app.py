@@ -1,8 +1,13 @@
 import os
 import sys
 
-from LLM import InternLM_LLM
+import torch
 
+from typing import Any, List, Optional
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+from langchain.llms.base import LLM
+from langchain.callbacks.manager import CallbackManagerForLLMRun
 from langchain.vectorstores import Chroma
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
