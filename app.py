@@ -1,10 +1,15 @@
-from langchain.vectorstores import Chroma
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 import os
 from LLM import InternLM_LLM
+
+from langchain.vectorstores import Chroma
+from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
+
 from modelscope import snapshot_download, AutoModel, AutoTokenizer
+
+import ('pysqlite3')
+sys.modules['sqlite3']= sys.modules.pop('pysqlite3')
 
 def load_chain():
     # 加载问答链
