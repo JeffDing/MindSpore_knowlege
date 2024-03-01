@@ -116,7 +116,7 @@ def greet(name):
         """)
     return block
     #gr.close_all()
-iface = gr.Interface(fn=greet)
+iface = gr.Interface(fn=greet,input='text',output='text')
 iface.launch()
 
 # 直接启动
