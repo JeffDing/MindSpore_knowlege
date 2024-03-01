@@ -105,4 +105,3 @@ with block as demo:
 gr.close_all()
 # 直接启动
 demo.launch()
-
