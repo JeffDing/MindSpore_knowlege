@@ -59,7 +59,6 @@ class Model_center():
     """
     存储问答 Chain 的对象 
     """
-    init()
     def __init__(self):
         self.chain = load_chain()
 
