@@ -113,9 +113,7 @@ with block as demo:
     2. 使用中如果出现异常，将会在文本输入框进行展示，请不要惊慌。 <br>
     """)
 # threads to consume the request
-gr.close_all()
 # 启动新的 Gradio 应用，设置分享功能为 True，并使用环境变量 PORT1 指定服务器端口。
 # demo.launch(share=True, server_port=int(os.environ['PORT1']))
 # 直接启动
-demo = gr.Interface(fn=load_chain, inputs=block, outputs=block)
 demo.launch()
