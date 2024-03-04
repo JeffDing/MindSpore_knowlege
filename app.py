@@ -15,7 +15,7 @@ import os
 # 使用openxlab下载模型到本地
 from openxlab.model import download
 llm_model_path = "internlm-chat-7b"
-download(model_repo="Shanghai_AI_Laboratory/internlm-chat-7b", output=llm_model_path)
+download(model_repo="OpenLMLab/InternLM-chat-7b", output=llm_model_path)
 
 def load_chain():
     model_dir = "internlm-chat-7b"
