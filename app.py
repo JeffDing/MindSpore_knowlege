@@ -37,7 +37,6 @@ def load_chain():
 
     # model_path: InternLM 模型路径
     # 从本地初始化模型
-    super().__init__()
     print("正在从本地加载模型...")
     model_path = "/home/xlab-app-center/.cache/modelscope/hub/Shanghai_AI_Laboratory/internlm-chat-7b"
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
