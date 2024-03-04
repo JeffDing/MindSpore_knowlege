@@ -22,7 +22,7 @@ def load_chain():
     os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 --local-dir sentence-transformer')
     
     # 定义 Embeddings
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformer")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
     # 向量数据库持久化路径
     persist_directory = 'data_base/vector_db/chroma'
@@ -33,7 +33,7 @@ def load_chain():
         embedding_function=embeddings
     )
 
-    llm = InternLM_LLM(model_path = model_dir)
+    llm = InternLM_LLM(model_path = "/home/xlab-app-center/.cache/modelscope/hub/Shanghai_AI_Laboratory/internlm-chat-7b")
 
     template = """使用以下上下文来回答用户的问题。如果你不知道答案，就说你不知道。总是使用中文回答。
     问题: {question}
