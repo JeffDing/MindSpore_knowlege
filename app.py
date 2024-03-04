@@ -33,7 +33,17 @@ def load_chain():
         embedding_function=embeddings
     )
 
-    llm = InternLM_LLM(model_path = "/home/xlab-app-center/.cache/modelscope/hub/Shanghai_AI_Laboratory/internlm-chat-7b")
+    #llm = InternLM_LLM(model_path = "/home/xlab-app-center/.cache/modelscope/hub/Shanghai_AI_Laboratory/internlm-chat-7b")
+
+    # model_path: InternLM 模型路径
+    # 从本地初始化模型
+    super().__init__()
+    print("正在从本地加载模型...")
+    model_path = "/home/xlab-app-center/.cache/modelscope/hub/Shanghai_AI_Laboratory/internlm-chat-7b"
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True).to(torch.bfloat16).cuda()
+    model = model.eval()
+    print("完成本地模型的加载")
 
     template = """使用以下上下文来回答用户的问题。如果你不知道答案，就说你不知道。总是使用中文回答。
     问题: {question}
@@ -50,7 +60,7 @@ def load_chain():
     # 运行 chain
     from langchain.chains import RetrievalQA
 
-    qa_chain = RetrievalQA.from_chain_type(llm,
+    qa_chain = RetrievalQA.from_chain_type(model,
                                         retriever=vectordb.as_retriever(),
                                         return_source_documents=True,
                                         chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
