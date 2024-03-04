@@ -11,6 +11,10 @@ from langchain.prompts import PromptTemplate
 import torch
 from modelscope import snapshot_download, AutoModel, AutoTokenizer
 import os
+from langchain.llms.base import LLM
+from typing import Any, List, Optional
+from langchain.callbacks.manager import CallbackManagerForLLMRun
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 def load_chain():
     model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b', revision='v1.0.3')
