@@ -11,22 +11,18 @@ from langchain.prompts import PromptTemplate
 import torch
 from modelscope import snapshot_download, AutoModel, AutoTokenizer
 import os
-from langchain.llms.base import LLM
-from typing import Any, List, Optional
-from langchain.callbacks.manager import CallbackManagerForLLMRun
-from transformers import AutoTokenizer, AutoModelForCausalLM
+def init():
+    model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm2-chat-7b'
+                                  , cache_dir='./', revision='v1.0.3')
+    os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+    # 下载模型
+    os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 --local-dir sentence-transformer')
+
 
 def load_chain():
-    model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b', revision='v1.0.3')
-    os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
-
-    print(model_dir)
-    
-    # 下载模型
-    #os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 --local-dir sentence-transformer')
-    
+    # 加载问答链
     # 定义 Embeddings
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformer")
 
     # 向量数据库持久化路径
     persist_directory = 'data_base/vector_db/chroma'
@@ -37,16 +33,7 @@ def load_chain():
         embedding_function=embeddings
     )
 
-    #llm = InternLM_LLM(model_path = "/home/xlab-app-center/.cache/modelscope/hub/Shanghai_AI_Laboratory/internlm-chat-7b")
-
-    # model_path: InternLM 模型路径
-    # 从本地初始化模型
-    print("正在从本地加载模型...")
-    model_path = "/home/xlab-app-center/.cache/modelscope/hub/Shanghai_AI_Laboratory/internlm-chat-7b"
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True).to(torch.bfloat16).cuda()
-    model = model.eval()
-    print("完成本地模型的加载")
+    llm = InternLM_LLM(model_path = "Shanghai_AI_Laboratory/internlm-chat-7b")
 
     template = """使用以下上下文来回答用户的问题。如果你不知道答案，就说你不知道。总是使用中文回答。
     问题: {question}
@@ -63,7 +50,7 @@ def load_chain():
     # 运行 chain
     from langchain.chains import RetrievalQA
 
-    qa_chain = RetrievalQA.from_chain_type(model,
+    qa_chain = RetrievalQA.from_chain_type(llm,
                                         retriever=vectordb.as_retriever(),
                                         return_source_documents=True,
                                         chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
@@ -74,6 +61,7 @@ class Model_center():
     """
     存储问答 Chain 的对象 
     """
+    init()
     def __init__(self):
         self.chain = load_chain()
 
@@ -125,7 +113,8 @@ with block as demo:
     2. 使用中如果出现异常，将会在文本输入框进行展示，请不要惊慌。 <br>
     """)
 # threads to consume the request
+gr.close_all()
 # 启动新的 Gradio 应用，设置分享功能为 True，并使用环境变量 PORT1 指定服务器端口。
 # demo.launch(share=True, server_port=int(os.environ['PORT1']))
 # 直接启动
-demo.launch(share=True)
+demo.launch()
