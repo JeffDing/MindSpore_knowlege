@@ -12,9 +12,13 @@ import torch
 from modelscope import snapshot_download, AutoModel, AutoTokenizer
 import os
 
+# 使用openxlab下载模型到本地
+from openxlab.model import download
+llm_model_path = "internlm-chat-7b"
+download(model_repo="Shanghai_AI_Laboratory/internlm-chat-7b", output=llm_model_path)
+
 def load_chain():
-    model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b'
-                                  , cache_dir='./', revision='v1.0.3')
+    model_dir = "internlm-chat-7b"
     os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
     # 下载模型
     os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 --local-dir sentence-transformer')
