@@ -115,5 +115,5 @@ gr.close_all()
 # 启动新的 Gradio 应用，设置分享功能为 True，并使用环境变量 PORT1 指定服务器端口。
 # demo.launch(share=True, server_port=int(os.environ['PORT1']))
 # 直接启动
-demo = gr.Interface(fn=model_center, inputs=text, outputs=text)
+demo = gr.Interface(fn=block, inputs=[msg, chatbot], outputs=[msg, chatbot])
 demo.launch()
