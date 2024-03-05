@@ -7,7 +7,7 @@ import torch
 class InternLM_LLM(LLM):
     # 基于本地 InternLM 自定义 LLM 类
     tokenizer : AutoTokenizer = None
-    model: AutoModelForCausalLM = None
+    model : AutoModelForCausalLM = None
 
     def __init__(self, model_path :str):
         # model_path: InternLM 模型路径
@@ -16,7 +16,7 @@ class InternLM_LLM(LLM):
         print("正在从本地加载模型...")
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         print("tokenizer成功")
-        self.model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True)
+        self.model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True, torch_dtype=torch.bfloat16
         print("model成功")
         self.model = self.model.eval()
         print("完成本地模型的加载")
