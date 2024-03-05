@@ -16,7 +16,7 @@ def load_chain():
     model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b', revision='master')
     os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
     # 下载模型
-    os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)
+    os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
     
     # 加载问答链
     # 定义 Embeddings
