@@ -11,15 +11,14 @@ from langchain.prompts import PromptTemplate
 import torch
 from modelscope import snapshot_download, AutoModel, AutoTokenizer
 import os
-def init():
+
+def load_chain():
     model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b'
                                   , cache_dir='./', revision='v1.0.3')
     os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
     # 下载模型
     os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 --local-dir sentence-transformer')
-
-
-def load_chain():
+    
     # 加载问答链
     # 定义 Embeddings
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformer")
@@ -33,7 +32,7 @@ def load_chain():
         embedding_function=embeddings
     )
 
-    llm = InternLM_LLM(model_path = "Shanghai_AI_Laboratory/internlm-chat-7b")
+    llm = InternLM_LLM(model_path = model_dir)
 
     template = """使用以下上下文来回答用户的问题。如果你不知道答案，就说你不知道。总是使用中文回答。
     问题: {question}
@@ -61,7 +60,6 @@ class Model_center():
     """
     存储问答 Chain 的对象 
     """
-    init()
     def __init__(self):
         self.chain = load_chain()
 
