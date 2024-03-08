@@ -35,7 +35,7 @@ def load_chain():
         embedding_function=embeddings
     )
 
-    model_dir = "/home/xlab-app-center/.cache/model/internlm2-chat-1.8b")
+    model_dir = "/home/xlab-app-center/.cache/model/internlm2-chat-1.8b"
 
     llm = InternLM_LLM(model_path = model_dir)
 
