@@ -15,7 +15,8 @@ import os
 
 def load_chain():
     #model_dir = snapshot_download("Shanghai_AI_Laboratory/internlm-chat-7b", revision="master")
-    download(model_repo="OpenLMLab/internlm2-chat-1.8b", model_name="internlm2-chat-1.8b", output="./internlm2-chat-1.8b")
+    llm_model_path = "internlm2-chat-1_8b"
+    download(model_repo="OpenLMLab/internlm2-chat-1.8b", model_name="internlm2-chat-1.8b", output=llm_model_path)
 
     os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
     # 下载模型
@@ -34,7 +35,7 @@ def load_chain():
         embedding_function=embeddings
     )
 
-    llm = InternLM_LLM(model_path = "./internlm2-chat-1.8b")
+    llm = InternLM_LLM(model_path = llm_model_path)
 
     template = """使用以下上下文来回答用户的问题。如果你不知道答案，就说你不知道。总是使用中文回答。
     问题: {question}
